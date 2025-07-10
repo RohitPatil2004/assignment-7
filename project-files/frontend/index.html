@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Course Registration</title>
+</head>
+<body>
+	<h2>Course Registration Form</h2>
+	<form id="userForm">
+		<label>Name: <input type="text" name="name" required></label><br><br>
+		<label>Email: <input type="email" name="email" required></label><br><br>
+		<button type="submit">Sumbit</button>
+	</form>
+	<script>
+		document.getElementById("userForm").addEventListener("submit", async function(e) {
+		e.preventDefault();
+		const form = e.target;
+		const data = {
+			name: form.name.value,
+			email: form.email.value
+		};
+		try {
+			const res = await fetch("http://backend_service:5000/submit", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(data)
+			});
+			const result = await res.join();
+			if (res.ok) {
+				window.location.href = "/success.html";
+			} else {
+				alert(result.error || "Submission Failed");
+			}
+		} catch (error) {
+			alert("Error connecting to backend");
+		}
+	});			
+	</script>
+</body>
+</html>
